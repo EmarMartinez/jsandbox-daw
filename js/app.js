@@ -477,7 +477,7 @@ $(document).ready(function () {
     false
   ); */
   async function initEditors() {
-    const editorHTML = await initEditorAsync(
+    editorHTML = await initEditorAsync(
       "#html",
       "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/doc.html",
       "html",
@@ -486,7 +486,7 @@ $(document).ready(function () {
       false,
       true
     );
-    const editorCSS = await initEditorAsync(
+    editorCSS = await initEditorAsync(
       "#css",
       "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/style.css",
       "css",
@@ -495,7 +495,7 @@ $(document).ready(function () {
       false,
       false
     );
-    const editorJS = await initEditorAsync(
+    editorJS = await initEditorAsync(
       "#js",
       "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/script.js",
       "javascript",
@@ -504,7 +504,7 @@ $(document).ready(function () {
       false,
       false
     );
-    const editorTEXT = await initEditorAsync(
+    editorTEXT = await initEditorAsync(
       "#text",
       "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/documentation.txt",
       "text",
@@ -513,7 +513,7 @@ $(document).ready(function () {
       true,
       false
     );
-    const editorEXERCISE = await initEditorAsync(
+    editorEXERCISE = await initEditorAsync(
       "#exercisePanel",
       "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
       "text",
@@ -522,7 +522,7 @@ $(document).ready(function () {
       true,
       false
     );
-    const editorDEV = await initEditorAsync(
+    editorDEV = await initEditorAsync(
       "#dev",
       "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
       "text",
