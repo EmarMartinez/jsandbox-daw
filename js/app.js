@@ -72,7 +72,8 @@ CONFIG.nombrePaneles = [
   "#textPanel",
   "#outputPanel",
   "#devPanel",
-]; //
+];
+CONFIG.exerciseMatrix = [];
 //																															//
 // Configuraciones de estilo para los editores de código																	//
 CONFIG.EditorTema = "one_dark";
@@ -195,7 +196,7 @@ $(document).ready(function () {
         respuesta["menu"].ud.forEach((unidad) => {
           let unidadTxt = "UD " + unidad.numero + ". " + unidad.titulo;
           $("#menu").append("<li><h4>" + unidadTxt + "</h4></li>");
-
+          let ejercicios = [];
           unidad.ejemplos.ej.forEach((ejemplo) => {
             let ejercicioActual = "";
             if (unidad.numero == CONFIG.ud && ejemplo.numero == CONFIG.ex)
@@ -243,7 +244,10 @@ $(document).ready(function () {
 
             $("#menu").append(enlaceEjemplo);
             tabindex++;
+
+            ejercicios.push(ejemplo.numero);
           });
+          CONFIG.exerciseMatrix.push(ejercicios);
         });
         // Rellemanos el info-panel
         // Recogemos el info del ejemplo concreto
@@ -656,11 +660,51 @@ $(document).ready(function () {
   });
 
   $("#back").click(function () {
-    alert("anterior ejercicio aún por desarrollar");
+    var currentUd = parseInt(CONFIG.ud);
+    var currentEx = parseInt(CONFIG.ex);
+    if (currentEx > 1) {
+      currentEx--;
+    } else {
+      if (currentUd > 1) {
+        currentUd--;
+        currentEx = CONFIG.exerciseMatrix[currentUd].length;
+      } else {
+        currentUd = CONFIG.exerciseMatrix.length;
+        currentEx = CONFIG.exerciseMatrix[currentUd - 1].length;
+      }
+    }
+    window.location.href = `index.html?iframe=${
+      CONFIG.iframe
+    }&ud=${currentUd}&ex=${currentEx}&mode=${CONFIG.mode}&runload=${
+      CONFIG.runload
+    }&liveserver=${CONFIG.liveserver}&view=${CONFIG.view}&dark=${
+      CONFIG.dark
+    }&panels=${CONFIG.panels.join("")}`;
   });
 
   $("#next").click(function () {
-    alert("siguiente ejercicio aún por desarrollar");
+    var currentUd = parseInt(CONFIG.ud);
+    var currentEx = parseInt(CONFIG.ex);
+
+    if (CONFIG.exerciseMatrix[currentUd - 1].length === currentEx) {
+      if (CONFIG.exerciseMatrix.length === currentUd) {
+        currentUd = 1;
+        currentEx = 1;
+      } else {
+        currentUd++;
+        currentEx = 1;
+      }
+    } else {
+      currentEx++;
+    }
+
+    window.location.href = `index.html?iframe=${
+      CONFIG.iframe
+    }&ud=${currentUd}&ex=${currentEx}&mode=${CONFIG.mode}&runload=${
+      CONFIG.runload
+    }&liveserver=${CONFIG.liveserver}&view=${CONFIG.view}&dark=${
+      CONFIG.dark
+    }&panels=${CONFIG.panels.join("")}`;
   });
 
   $("#config").click(function () {
