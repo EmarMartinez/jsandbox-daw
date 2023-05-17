@@ -385,7 +385,8 @@ $(document).ready(function () {
   // foldwidgets y printmargin siempre false
   // background editorcolorfondo
   // container.style.height solo para el html
-  function initEditor(
+  /*   function initEditor(
+    varRef,
     id,
     url,
     mode,
@@ -400,22 +401,23 @@ $(document).ready(function () {
       async: true,
       success: (respuesta) => {
         $(id).text(respuesta);
-        var editor = ace.edit(id.slice(1));
-        editor.setTheme("ace/theme/" + CONFIG.EditorTema);
-        editor.getSession().setMode("ace/mode/" + mode);
-        editor.session.setUseWrapMode(true);
-        editor.container.style.background = CONFIG.EditorColorFondo;
-        editor.setShowFoldWidgets(false);
-        editor.setShowPrintMargin(false);
-        if (isReadOnly) editor.setReadOnly(true);
-        if (isBlockScrolling) editor.$blockScrolling = Infinity;
-        if (isLineNumbers) editor.renderer.setOption("showLineNumbers", false);
-        if (isHeight) editor.container.style.height;
+        varRef = ace.edit(id.slice(1));
+        varRef.setTheme("ace/theme/" + CONFIG.EditorTema);
+        varRef.getSession().setMode("ace/mode/" + mode);
+        varRef.session.setUseWrapMode(true);
+        varRef.container.style.background = CONFIG.EditorColorFondo;
+        varRef.setShowFoldWidgets(false);
+        varRef.setShowPrintMargin(false);
+        if (isReadOnly) varRef.setReadOnly(true);
+        if (isBlockScrolling) varRef.$blockScrolling = Infinity;
+        if (isLineNumbers) varRef.renderer.setOption("showLineNumbers", false);
+        if (isHeight) varRef.container.style.height;
       },
     });
   }
 
   initEditor(
+    editorHTML,
     "#html",
     "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/doc.html",
     "html",
@@ -425,6 +427,7 @@ $(document).ready(function () {
     true
   );
   initEditor(
+    editorCSS,
     "#css",
     "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/style.css",
     "css",
@@ -434,6 +437,7 @@ $(document).ready(function () {
     false
   );
   initEditor(
+    editorJS,
     "#js",
     "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/script.js",
     "javascript",
@@ -443,6 +447,7 @@ $(document).ready(function () {
     false
   );
   initEditor(
+    editorTEXT,
     "#text",
     "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/documentation.txt",
     "text",
@@ -452,6 +457,7 @@ $(document).ready(function () {
     false
   );
   initEditor(
+    editorEXERCISE,
     "#exercisePanel",
     "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
     "text",
@@ -460,12 +466,117 @@ $(document).ready(function () {
     true,
     false
   );
+  initEditor(
+    editorDEV,
+    "#dev",
+    "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
+    "text",
+    true,
+    true,
+    true,
+    false
+  ); */
+  async function initEditors() {
+    const editorHTML = await initEditorAsync(
+      "#html",
+      "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/doc.html",
+      "html",
+      false,
+      true,
+      false,
+      true
+    );
+    const editorCSS = await initEditorAsync(
+      "#css",
+      "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/style.css",
+      "css",
+      false,
+      true,
+      false,
+      false
+    );
+    const editorJS = await initEditorAsync(
+      "#js",
+      "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/script.js",
+      "javascript",
+      false,
+      true,
+      false,
+      false
+    );
+    const editorTEXT = await initEditorAsync(
+      "#text",
+      "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/documentation.txt",
+      "text",
+      true,
+      false,
+      true,
+      false
+    );
+    const editorEXERCISE = await initEditorAsync(
+      "#exercisePanel",
+      "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
+      "text",
+      true,
+      false,
+      true,
+      false
+    );
+    const editorDEV = await initEditorAsync(
+      "#dev",
+      "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
+      "text",
+      true,
+      true,
+      true,
+      false
+    );
+
+    // Resto del código que depende de los editores
+  }
+
+  async function initEditorAsync(
+    id,
+    url,
+    mode,
+    isReadOnly,
+    isLineNumbers,
+    isBlockScrolling,
+    isHeight
+  ) {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        type: "GET",
+        async: true,
+        success: (respuesta) => {
+          $(id).text(respuesta);
+          const varRef = ace.edit(id.slice(1));
+          varRef.setTheme("ace/theme/" + CONFIG.EditorTema);
+          varRef.getSession().setMode("ace/mode/" + mode);
+          varRef.session.setUseWrapMode(true);
+          varRef.container.style.background = CONFIG.EditorColorFondo;
+          varRef.setShowFoldWidgets(false);
+          varRef.setShowPrintMargin(false);
+          if (isReadOnly) varRef.setReadOnly(true);
+          if (isBlockScrolling) varRef.$blockScrolling = Infinity;
+          if (isLineNumbers)
+            varRef.renderer.setOption("showLineNumbers", false);
+          if (isHeight) varRef.container.style.height;
+          resolve(varRef);
+        },
+        error: (error) => reject(error),
+      });
+    });
+  }
+
+  initEditors();
 
   // Rellemanos el editor dev de ACE. Representa la consola, no es editable ni muestra números de línea.
   //  No se inicializa cargando un archivo, como los anteriores, sino que lo hace
   //  a partir de las salidas de consola capturadas por "js/tools/console.js".
   // Inicializamos el editor js de ACE.
-  editorDEV = ace.edit("dev");
+  /* editorDEV = ace.edit("dev");
   editorDEV.setTheme("ace/theme/" + CONFIG.EditorTema);
   editorDEV.getSession().setMode("ace/mode/text");
   editorDEV.container.style.background = CONFIG.EditorColorFondo;
@@ -473,7 +584,7 @@ $(document).ready(function () {
   editorDEV.setShowPrintMargin(false);
   editorDEV.setReadOnly(true);
   editorDEV.renderer.setOption("showLineNumbers", false);
-  editorDEV.$blockScrolling = Infinity;
+  editorDEV.$blockScrolling = Infinity; */
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // ASIGNACIÓN DE TODOS LOS EVENTOS:																						//
