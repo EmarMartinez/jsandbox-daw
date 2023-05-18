@@ -169,6 +169,7 @@ var editorDEV;
 var editorEXERCISE;
 var textoConsola = "Mensajes de CONSOLA:\n>\n";
 var tabindex = 9; // contador para los tabindex de la página
+var cookie = { html: [], css: [], js: [] };
 
 $(document).ready(function () {
   // Inicializamos las variables globales del iframe con el resultado el código.
@@ -535,6 +536,7 @@ $(document).ready(function () {
       true,
       false
     );
+    saveCookies();
 
     // Resto del código que depende de los editores
   }
@@ -631,7 +633,6 @@ $(document).ready(function () {
     // Si está activada la opción de liveserver en la configuración:
     if (CONFIG.liveserver == "1") {
       var $this = $(this);
-
       if ($this.attr("id") === "html") {
         body.html(editorHTML.getValue());
         let scriptTagBody = $("<script>").appendTo(body);
@@ -1069,4 +1070,13 @@ $(document).ready(function () {
         "-REFACTORIZAR EL CÓDIGO HTML, CSS y JS para que quede bien legible y organizado\n "
     );
   }, 2000); */
+  function saveCookies() {
+    this.cookie.html = editorHTML.getValue();
+    this.cookie.css = editorCSS.getValue();
+    this.cookie.js = editorJS.getValue();
+  }
+  $("#html, #css, #js").on("input", function () {
+    saveCookies();
+    console.log("cookie modificada");
+  });
 });
