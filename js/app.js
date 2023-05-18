@@ -169,7 +169,7 @@ var editorDEV;
 var editorEXERCISE;
 var textoConsola = "Mensajes de CONSOLA:\n>\n";
 var tabindex = 9; // contador para los tabindex de la página
-var cookie = { html: [], css: [], js: [] };
+var cookie = { html: "", css: "", js: "", config: {} };
 
 $(document).ready(function () {
   // Inicializamos las variables globales del iframe con el resultado el código.
@@ -1074,6 +1074,7 @@ $(document).ready(function () {
     this.cookie.html = editorHTML.getValue();
     this.cookie.css = editorCSS.getValue();
     this.cookie.js = editorJS.getValue();
+    this.cookie.config = CONFIG;
   }
   $("#html, #css, #js").on("input", function () {
     saveCookies();
