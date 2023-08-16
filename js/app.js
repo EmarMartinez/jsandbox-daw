@@ -169,6 +169,7 @@ var editorDEV;
 var editorEXERCISE;
 var textoConsola = "Mensajes de CONSOLA:\n>\n";
 var tabindex = 9; // contador para los tabindex de la página
+var cookie = { html: "", css: "", js: "", config: {} };
 
 $(document).ready(function () {
   // Inicializamos las variables globales del iframe con el resultado el código.
@@ -273,213 +274,6 @@ $(document).ready(function () {
 
   // Rellenamos los paneles a partir de archivos de la ruta "examples/ud-/ex-", donde - es el número de ud y de ex
 
-  //  editorHTML se rellena con "doc.html"
-  /*   $(() => {
-    $.ajax({
-      url: "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/doc.html",
-      type: "GET",
-      async: true,
-      success: (respuesta) => {
-        // Rellemanos el editor html de ACE.
-        $("#html").text(respuesta);
-        // Inicializamos el editor html de ACE.
-        editorHTML = ace.edit("html");
-        editorHTML.setTheme("ace/theme/" + CONFIG.EditorTema);
-        editorHTML.getSession().setMode("ace/mode/html");
-        editorHTML.session.setUseWrapMode(true);
-        editorHTML.container.style.background = CONFIG.EditorColorFondo;
-        editorHTML.setShowFoldWidgets(false);
-        editorHTML.setShowPrintMargin(false);
-        editorHTML.container.style.height;
-      },
-    });
-  });
-
-  //  editorCSS se rellena con "style.css"
-  $(() => {
-    $.ajax({
-      url: "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/style.css",
-      type: "GET",
-      async: true,
-      success: (respuesta) => {
-        // Rellemanos el editor css de ACE.
-        $("#css").text(respuesta);
-        // Inicializamos el editor css de ACE.
-        editorCSS = ace.edit("css");
-        editorCSS.setTheme("ace/theme/" + CONFIG.EditorTema);
-        editorCSS.getSession().setMode("ace/mode/css");
-        editorCSS.session.setUseWrapMode(true);
-        editorCSS.container.style.background = CONFIG.EditorColorFondo;
-        editorCSS.setShowFoldWidgets(false);
-        editorCSS.setShowPrintMargin(false);
-      },
-    });
-  });
-
-  //  editorJS se rellena con "script.js"
-  $(() => {
-    $.ajax({
-      url: "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/script.js",
-      type: "GET",
-      async: true,
-      success: (respuesta) => {
-        // Rellemanos el editor js de ACE.
-        $("#js").text(respuesta);
-        // Inicializamos el editor js de ACE.
-        editorJS = ace.edit("js");
-        editorJS.setTheme("ace/theme/" + CONFIG.EditorTema);
-        editorJS.getSession().setMode("ace/mode/javascript");
-        editorJS.session.setUseWrapMode(true);
-        editorJS.container.style.background = CONFIG.EditorColorFondo;
-        editorJS.setShowFoldWidgets(false);
-        editorJS.setShowPrintMargin(false);
-      },
-    });
-  });
-  //  editorTXT se rellena con "documentation.txt"
-  $(() => {
-    $.ajax({
-      url: "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/documentation.txt",
-      type: "GET",
-      async: true,
-      success: (respuesta) => {
-        // Rellemanos el editor text de ACE.
-        $("#text").text(respuesta);
-        // Inicializamos el editor text de ACE.
-        editorTEXT = ace.edit("text");
-        editorTEXT.setTheme("ace/theme/" + CONFIG.EditorTema);
-        editorTEXT.getSession().setMode("ace/mode/text");
-        editorTEXT.container.style.background = CONFIG.EditorColorFondo;
-        editorTEXT.session.setUseWrapMode(true);
-        editorTEXT.setShowFoldWidgets(false);
-        editorTEXT.setShowPrintMargin(false);
-        editorTEXT.setReadOnly(true);
-        editorTEXT.renderer.setOption("showLineNumbers", false);
-        editorTEXT.$blockScrolling = Infinity;
-      },
-    });
-  });
-
-  //  exercisePanel se rellena con "exercise.txt"
-  $(() => {
-    $.ajax({
-      url: "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
-      type: "GET",
-      async: true,
-      success: (respuesta) => {
-        // Rellemanos el editor text de ACE.
-        $("#exercisePanel").text(respuesta);
-        // Inicializamos el editor text de ACE.
-        editorEXERCISE = ace.edit("exercisePanel");
-        editorEXERCISE.setTheme("ace/theme/" + CONFIG.EditorTema);
-        editorEXERCISE.getSession().setMode("ace/mode/text");
-        editorEXERCISE.container.style.background = CONFIG.EditorColorFondo;
-        editorEXERCISE.session.setUseWrapMode(true);
-        editorEXERCISE.setShowFoldWidgets(false);
-        editorEXERCISE.setShowPrintMargin(false);
-        editorEXERCISE.setReadOnly(true);
-        editorEXERCISE.renderer.setOption("showLineNumbers", false);
-        editorEXERCISE.$blockScrolling = Infinity;
-      },
-    });
-  }); */
-
-  //idEjemplo: #exercisePanel id.slice(1) parametros : element mode readonly showlinenumbers, blockscrolling
-  // setuserwrapmode siempre true
-  // foldwidgets y printmargin siempre false
-  // background editorcolorfondo
-  // container.style.height solo para el html
-  /*   function initEditor(
-    varRef,
-    id,
-    url,
-    mode,
-    isReadOnly,
-    isLineNumbers,
-    isBlockScrolling,
-    isHeight
-  ) {
-    $.ajax({
-      url: url,
-      type: "GET",
-      async: true,
-      success: (respuesta) => {
-        $(id).text(respuesta);
-        varRef = ace.edit(id.slice(1));
-        varRef.setTheme("ace/theme/" + CONFIG.EditorTema);
-        varRef.getSession().setMode("ace/mode/" + mode);
-        varRef.session.setUseWrapMode(true);
-        varRef.container.style.background = CONFIG.EditorColorFondo;
-        varRef.setShowFoldWidgets(false);
-        varRef.setShowPrintMargin(false);
-        if (isReadOnly) varRef.setReadOnly(true);
-        if (isBlockScrolling) varRef.$blockScrolling = Infinity;
-        if (isLineNumbers) varRef.renderer.setOption("showLineNumbers", false);
-        if (isHeight) varRef.container.style.height;
-      },
-    });
-  }
-
-  initEditor(
-    editorHTML,
-    "#html",
-    "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/doc.html",
-    "html",
-    false,
-    true,
-    false,
-    true
-  );
-  initEditor(
-    editorCSS,
-    "#css",
-    "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/style.css",
-    "css",
-    false,
-    true,
-    false,
-    false
-  );
-  initEditor(
-    editorJS,
-    "#js",
-    "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/script.js",
-    "javascript",
-    false,
-    true,
-    false,
-    false
-  );
-  initEditor(
-    editorTEXT,
-    "#text",
-    "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/documentation.txt",
-    "text",
-    true,
-    false,
-    true,
-    false
-  );
-  initEditor(
-    editorEXERCISE,
-    "#exercisePanel",
-    "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
-    "text",
-    true,
-    false,
-    true,
-    false
-  );
-  initEditor(
-    editorDEV,
-    "#dev",
-    "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
-    "text",
-    true,
-    true,
-    true,
-    false
-  ); */
   async function initEditors() {
     editorHTML = await initEditorAsync(
       "#html",
@@ -488,7 +282,9 @@ $(document).ready(function () {
       false,
       true,
       false,
-      true
+      true,
+      CONFIG.ud,
+      CONFIG.ex
     );
     editorCSS = await initEditorAsync(
       "#css",
@@ -497,7 +293,9 @@ $(document).ready(function () {
       false,
       true,
       false,
-      false
+      false,
+      CONFIG.ud,
+      CONFIG.ex
     );
     editorJS = await initEditorAsync(
       "#js",
@@ -506,7 +304,9 @@ $(document).ready(function () {
       false,
       true,
       false,
-      false
+      false,
+      CONFIG.ud,
+      CONFIG.ex
     );
     editorTEXT = await initEditorAsync(
       "#text",
@@ -515,7 +315,9 @@ $(document).ready(function () {
       true,
       false,
       true,
-      false
+      false,
+      CONFIG.ud,
+      CONFIG.ex
     );
     editorEXERCISE = await initEditorAsync(
       "#exercisePanel",
@@ -524,7 +326,9 @@ $(document).ready(function () {
       true,
       false,
       true,
-      false
+      false,
+      CONFIG.ud,
+      CONFIG.ex
     );
     editorDEV = await initEditorAsync(
       "#dev",
@@ -533,8 +337,11 @@ $(document).ready(function () {
       true,
       true,
       true,
-      false
+      false,
+      CONFIG.ud,
+      CONFIG.ex
     );
+    /* saveCookies(); */
 
     // Resto del código que depende de los editores
   }
@@ -554,7 +361,20 @@ $(document).ready(function () {
         type: "GET",
         async: true,
         success: (respuesta) => {
-          $(id).text(respuesta);
+          if (
+            localStorage.getItem(
+              "jsandbox-" + mode + CONFIG.ud + "-" + CONFIG.ex
+            ) != null
+          ) {
+            $(id).text(
+              localStorage.getItem(
+                "jsandbox-" + mode + CONFIG.ud + "-" + CONFIG.ex
+              )
+            );
+          } else {
+            $(id).text(respuesta);
+          }
+
           const varRef = ace.edit(id.slice(1));
           varRef.setTheme("ace/theme/" + CONFIG.EditorTema);
           varRef.getSession().setMode("ace/mode/" + mode);
@@ -562,6 +382,11 @@ $(document).ready(function () {
           varRef.container.style.background = CONFIG.EditorColorFondo;
           varRef.setShowFoldWidgets(false);
           varRef.setShowPrintMargin(false);
+          if (mode == "html" || "css" || "javascript") {
+            varRef.session.on("change", function (delta) {
+              update();
+            });
+          }
           if (isReadOnly) varRef.setReadOnly(true);
           if (isBlockScrolling) varRef.$blockScrolling = Infinity;
           if (isLineNumbers)
@@ -621,7 +446,6 @@ $(document).ready(function () {
         editorJS.getValue() +
         " \n} catch(err) { \n console.error(err);\n}"
     );
-    console.log("testemar");
 
     //--------------------------------------------------------------------------------------------------//
   });
@@ -631,7 +455,6 @@ $(document).ready(function () {
     // Si está activada la opción de liveserver en la configuración:
     if (CONFIG.liveserver == "1") {
       var $this = $(this);
-
       if ($this.attr("id") === "html") {
         body.html(editorHTML.getValue());
         let scriptTagBody = $("<script>").appendTo(body);
@@ -739,7 +562,10 @@ $(document).ready(function () {
   });
 
   $("#reset").click(function () {
-    alert("Falta de implementar, primero hay que gestrionar las cookies");
+    resetExercise();
+  });
+  $("#reset-all").click(function () {
+    resetAllExercises();
   });
 
   $("#runload").click(function () {
@@ -800,11 +626,10 @@ $(document).ready(function () {
   });
 
   $("#colorblind").click(function () {
-    alert(
-      "Falta de implementar, primero hay que hacer todos los estilos claros, oscuros y validar con WCAG 2"
-    );
+    toggleHighContrast();
+    /* location.reload(); */
 
-    let url = CONFIG.url;
+    /*     let url = CONFIG.url;
     if (CONFIG.dark == "0" || CONFIG.dark == "1") {
       url = url.replace("dark=0&", "dark=2&");
       url = url.replace("dark=1&", "dark=2&");
@@ -814,7 +639,7 @@ $(document).ready(function () {
       url = url.replace("dark=0&", "dark=1&");
       url = url.replace("dark=2&", "dark=1&");
     }
-    window.location.href = url;
+    window.location.href = url; */
   });
 
   $("#view").click(function () {
@@ -1046,7 +871,6 @@ $(document).ready(function () {
 
   $("#run").focus();
 
-  // TO DO para EMAR
   /* setTimeout(function () {
     alert(
       "POR HACER:____________________________________________\n" +
@@ -1069,4 +893,43 @@ $(document).ready(function () {
         "-REFACTORIZAR EL CÓDIGO HTML, CSS y JS para que quede bien legible y organizado\n "
     );
   }, 2000); */
+
+  function update() {
+    localStorage.setItem(
+      "jsandbox-html" + CONFIG.ud + "-" + CONFIG.ex,
+      editorHTML.getValue()
+    );
+
+    localStorage.setItem(
+      "jsandbox-css" + CONFIG.ud + "-" + CONFIG.ex,
+      editorCSS.getValue()
+    );
+
+    localStorage.setItem(
+      "jsandbox-javascript" + CONFIG.ud + "-" + CONFIG.ex,
+      editorJS.getValue()
+    );
+  }
+  async function resetExercise() {
+    localStorage.removeItem("jsandbox-html" + CONFIG.ud + "-" + CONFIG.ex);
+    localStorage.removeItem("jsandbox-css" + CONFIG.ud + "-" + CONFIG.ex);
+    localStorage.removeItem(
+      "jsandbox-javascript" + CONFIG.ud + "-" + CONFIG.ex
+    );
+    location.reload();
+  }
+
+  function resetAllExercises() {
+    localStorage.clear();
+    location.reload();
+  }
+
+  function toggleHighContrast() {
+    const styles = document.getElementById("styles");
+    if (styles.href.endsWith("style.css")) {
+      styles.href = "css/style-high-contrast.css";
+    } else {
+      styles.href = "css/style.css";
+    }
+  }
 });
