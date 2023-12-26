@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////*/
 :root {
   --color-fondo-dark: white;
-  --color-fondo-gradienete-dark: linear-gradient(
+  --color-fondo-gradiente-dark: linear-gradient(
     90deg,
     #8360c3,
     #2ebf91,
@@ -34,7 +34,7 @@
 body {
   font-family: sans-serif;
   overflow: hidden;
-  background: var(--color-fondo-gradienete-dark);
+  background: var(--color-fondo-gradiente-dark);
   min-width: 600px;
 }
 

@@ -76,9 +76,29 @@ CONFIG.nombrePaneles = [
 CONFIG.exerciseMatrix = [];
 //																															//
 // Configuraciones de estilo para los editores de código																	//
-CONFIG.EditorTema = "one_dark";
+/* CONFIG.EditorTema = "one_dark"; */
+
+function setEditorTheme(value) {
+  switch (value) {
+    case "0":
+      CONFIG.EditorTema = "light";
+      break;
+    case "1":
+      CONFIG.EditorTema = "one_dark";
+      break;
+    case "2":
+      CONFIG.EditorTema = "contraste";
+      break;
+  }
+}
+setEditorTheme(QueryString.dark);
 // en la ruta: js/tools/ace están todos los temas disponibles con el nombre theme-<nombre>.js								//
-CONFIG.EditorColorFondo = "#202020";
+if (!CONFIG.EditorColorFondo) {
+  CONFIG.dark === "0"
+    ? (CONFIG.EditorColorFondo = "#FFF")
+    : (CONFIG.EditorColorFondo = "#202020");
+}
+
 //																															//
 
 // CONFIG también deberá almacenar las Cookies 	cuando se implementen														//
@@ -361,6 +381,9 @@ $(document).ready(function () {
         type: "GET",
         async: true,
         success: (respuesta) => {
+          if (id === "#text") {
+            console.log(respuesta);
+          }
           if (
             localStorage.getItem(
               "jsandbox-" + mode + CONFIG.ud + "-" + CONFIG.ex
@@ -603,46 +626,36 @@ $(document).ready(function () {
   });
 
   $("#dark").click(function () {
-    alert(
-      "Falta de implementar, primero hay que hacer todos los estilos claros"
-    );
-
     let url = CONFIG.url;
     if (CONFIG.dark == "0") {
       url = url.replace("dark=0&", "dark=1&");
-      url = url.replace("dark=2&", "dark=1&");
     }
 
     if (CONFIG.dark == "1") {
       url = url.replace("dark=1&", "dark=0&");
-      url = url.replace("dark=2&", "dark=0&");
     }
 
     if (CONFIG.dark == "2") {
-      url = url.replace("dark=0&", "dark=1&");
       url = url.replace("dark=2&", "dark=1&");
     }
     window.location.href = url;
   });
 
   $("#colorblind").click(function () {
-    toggleHighContrast();
-    /* location.reload(); */
-
-    /*     let url = CONFIG.url;
+    let url = CONFIG.url;
     if (CONFIG.dark == "0" || CONFIG.dark == "1") {
       url = url.replace("dark=0&", "dark=2&");
       url = url.replace("dark=1&", "dark=2&");
     }
 
     if (CONFIG.dark == "2") {
-      url = url.replace("dark=0&", "dark=1&");
+      /* url = url.replace("dark=0&", "dark=1&"); */
       url = url.replace("dark=2&", "dark=1&");
     }
-    window.location.href = url; */
+    window.location.href = url;
   });
 
-  $("#view").click(function () {
+  /* $("#view").click(function () {
     alert(
       "Falta de implementar, primero hay que hacer todos los estilos horizontales"
     );
@@ -654,7 +667,7 @@ $(document).ready(function () {
       url = url.replace("view=1&", "view=0&");
     }
     window.location.href = url;
-  });
+  }); */
 
   $("#iframe").click(function () {
     var $bridge = $("<input>");
@@ -795,6 +808,28 @@ $(document).ready(function () {
     }
   }
 
+  function toggleDarkMode(configDark) {
+    const darkButton = $("#dark");
+    const colorBlindButton = $("#colorblind");
+
+    if (configDark === "0") {
+      darkButton.addClass("button-disable");
+      colorBlindButton.addClass("button-disable");
+      $("#text-dark").text("Activa Modo oscuro");
+      $("#text-colorblind").text("Activa Modo alto contraste");
+    } else if (configDark === "1") {
+      darkButton.addClass("button-enable");
+      colorBlindButton.addClass("button-disable");
+      $("#text-dark").text("Desactiva Modo oscuro");
+      $("#text-colorblind").text("Activa Modo alto contraste");
+    } else if (configDark === "2") {
+      darkButton.addClass("button-disable");
+      colorBlindButton.addClass("button-enable");
+      $("#text-dark").text("Activa Modo oscuro");
+      $("#text-colorblind").text("Desactiva Modo alto contraste");
+    }
+  }
+
   toggleButton(
     "runload",
     CONFIG.runload,
@@ -817,25 +852,13 @@ $(document).ready(function () {
   );
 
   toggleButton(
-    "dark",
-    CONFIG.dark,
-    "Activa Modo oscuro",
-    "Desactiva Modo oscuro"
-  );
-
-  toggleButton(
-    "colorblind",
-    CONFIG.dark,
-    "Activa Modo alto contraste",
-    "Desactiva Modo alto contraste"
-  );
-
-  toggleButton(
     "view",
     CONFIG.view,
     "Activa Vista vertical",
     "Desactiva Vista vertical"
   );
+
+  toggleDarkMode(CONFIG.dark);
 
   var editorIFRAME;
   $("#iframecode").text(CONFIG.textoIframe);
@@ -922,14 +945,5 @@ $(document).ready(function () {
   function resetAllExercises() {
     localStorage.clear();
     location.reload();
-  }
-
-  function toggleHighContrast() {
-    const styles = document.getElementById("styles");
-    if (styles.href.endsWith("style.css")) {
-      styles.href = "css/style-high-contrast.css";
-    } else {
-      styles.href = "css/style.css";
-    }
   }
 });
