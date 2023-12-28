@@ -70,7 +70,7 @@ CONFIG.nombrePaneles = [
   "#cssPanel",
   "#jsPanel",
   "#textPanel",
-  "#outputPanel",
+  "#outPanel",
   "#devPanel",
 ];
 CONFIG.exerciseMatrix = [];
@@ -381,9 +381,6 @@ $(document).ready(function () {
         type: "GET",
         async: true,
         success: (respuesta) => {
-          if (id === "#text") {
-            console.log(respuesta);
-          }
           if (
             localStorage.getItem(
               "jsandbox-" + mode + CONFIG.ud + "-" + CONFIG.ex
@@ -857,6 +854,12 @@ $(document).ready(function () {
     "Activa Vista vertical",
     "Desactiva Vista vertical"
   );
+
+  if (CONFIG.runload == "1") {
+    setTimeout(function () {
+      $("#run").trigger("click");
+    }, 1000);
+  }
 
   toggleDarkMode(CONFIG.dark);
 
