@@ -142,6 +142,10 @@ ul {
   overflow: hidden;
 }
 
+#showEx {
+  display: none;
+}
+
 .float-button-rigth {
   right: 15px;
 }
@@ -432,6 +436,9 @@ iframe {
   text-align: left;
   overflow-x: hidden;
   overflow-y: auto;
+}
+#exercise-modal {
+  display: hidden;
 }
 
 .show {
