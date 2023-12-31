@@ -70,10 +70,12 @@ CONFIG.nombrePaneles = [
   "#cssPanel",
   "#jsPanel",
   "#textPanel",
-  "#outPanel",
+  "#outputPanel",
   "#devPanel",
 ];
 CONFIG.exerciseMatrix = [];
+
+/* CONFIG.exerciseHtml = ""; */
 //																															//
 // Configuraciones de estilo para los editores de código																	//
 /* CONFIG.EditorTema = "one_dark"; */
@@ -151,6 +153,7 @@ if (
     "'\n" +
     " frameborder='0' \n allowfullscreen='allowfullscreen'>\n</iframe>";
 } else {
+  CONFIG.mode = QueryString.mode;
   CONFIG.panels = QueryString.panels.split("");
   CONFIG.panelsCode = CONFIG.panels.slice(0, 3);
   CONFIG.numPanelsCode = CONFIG.panelsCode.filter((x) => x == "1").length;
@@ -301,7 +304,7 @@ $(document).ready(function () {
       "html",
       false,
       true,
-      false,
+      true,
       true,
       CONFIG.ud,
       CONFIG.ex
@@ -312,7 +315,7 @@ $(document).ready(function () {
       "css",
       false,
       true,
-      false,
+      true,
       false,
       CONFIG.ud,
       CONFIG.ex
@@ -323,7 +326,7 @@ $(document).ready(function () {
       "javascript",
       false,
       true,
-      false,
+      true,
       false,
       CONFIG.ud,
       CONFIG.ex
@@ -339,7 +342,7 @@ $(document).ready(function () {
       CONFIG.ud,
       CONFIG.ex
     );
-    editorEXERCISE = await initEditorAsync(
+    /* editorEXERCISE = await initEditorAsync(
       "#exercisePanel",
       "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
       "text",
@@ -349,7 +352,7 @@ $(document).ready(function () {
       false,
       CONFIG.ud,
       CONFIG.ex
-    );
+    ); */
     editorDEV = await initEditorAsync(
       "#dev",
       "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise.txt",
@@ -361,11 +364,9 @@ $(document).ready(function () {
       CONFIG.ud,
       CONFIG.ex
     );
-    /* saveCookies(); */
-
-    // Resto del código que depende de los editores
   }
 
+  // Fin pruebas modo ejercicio
   async function initEditorAsync(
     id,
     url,
@@ -381,6 +382,12 @@ $(document).ready(function () {
         type: "GET",
         async: true,
         success: (respuesta) => {
+          if (id == "#html") {
+            CONFIG.html = respuesta;
+          }
+          if (id == "#css") {
+            CONFIG.css = respuesta;
+          }
           if (
             localStorage.getItem(
               "jsandbox-" + mode + CONFIG.ud + "-" + CONFIG.ex
@@ -404,7 +411,9 @@ $(document).ready(function () {
           varRef.setShowPrintMargin(false);
           if (mode == "html" || "css" || "javascript") {
             varRef.session.on("change", function (delta) {
-              update();
+              if (CONFIG.exercise !== true) {
+                update();
+              }
             });
           }
           if (isReadOnly) varRef.setReadOnly(true);
@@ -418,6 +427,36 @@ $(document).ready(function () {
       });
     });
   }
+
+  $.ajax({
+    url: "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise/doc.html",
+    type: "GET",
+    async: true,
+    success: (respuesta) => {
+      CONFIG.exHTML = respuesta;
+    },
+  });
+  $.ajax({
+    url: "examples/ud" + CONFIG.ud + "/ex" + CONFIG.ex + "/exercise/style.css",
+    type: "GET",
+    async: true,
+    success: (respuesta) => {
+      CONFIG.exCSS = respuesta;
+    },
+  });
+  $.ajax({
+    url:
+      "examples/ud" +
+      CONFIG.ud +
+      "/ex" +
+      CONFIG.ex +
+      "/exercise/documentation.txt",
+    type: "GET",
+    async: true,
+    success: (respuesta) => {
+      CONFIG.exDOC = respuesta;
+    },
+  });
 
   initEditors();
 
@@ -467,6 +506,30 @@ $(document).ready(function () {
         " \n} catch(err) { \n console.error(err);\n}"
     );
 
+    /* var resultHTML = document.getElementById("outputHTML");
+
+    var contenidoIframe = new XMLSerializer().serializeToString(
+      resultHTML.contentDocument
+    );
+
+    CONFIG.exerciseHtml = contenidoIframe;
+
+    var tempDiv = document.createElement("div");
+    tempDiv.innerHTML = contenidoIframe;
+    document.body.appendChild(tempDiv);
+
+    html2canvas(tempDiv, {
+      scale: 0.5,
+      width: resultHTML.innerWidth,
+      height: resultHTML.innerHeight,
+    }).then(function (canvas) {
+      var imagenUrl = canvas.toDataURL();
+      CONFIG.exerciseImage = imagenUrl;
+      console.log(imagenUrl);
+    });
+
+    document.body.removeChild(tempDiv); */
+
     //--------------------------------------------------------------------------------------------------//
   });
 
@@ -492,14 +555,79 @@ $(document).ready(function () {
   // ASIGNACIÓN DE TODOS EVENTOS CLIC EN LOS BOTONES:																						//
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   $("#exercise").click(function () {
-    alert("modo ejercicio aún por desarrollar");
+    if (!CONFIG.exHTML || !CONFIG.exCSS) {
+      alert("No hay ejercicio para este tema");
+      return;
+    }
+    if (!CONFIG.exercise) {
+      alert(
+        "Modo ejercicio\nPulsa el botón del ojo en la parte superior derecha para ver la solución"
+      );
+      CONFIG.exercise = true;
+      editorTEXT.setValue(CONFIG.exDOC);
+      editorHTML.setValue(CONFIG.exHTML);
+      editorCSS.setValue(CONFIG.exCSS);
+      editorHTML.selection.selectFileStart();
+      editorHTML.selection.selectLineEnd();
+      editorHTML.focus();
+      editorCSS.selection.selectFileStart();
+      editorCSS.selection.selectLineEnd();
+      editorCSS.focus();
+      $("#showEx").css("display", "flex");
+      $("#run").trigger("click");
+    } else {
+      let url = CONFIG.url;
+      window.location.href = url;
+    }
 
-    $(".exercise-container").show();
+    /* editorHTML = ace.edit("html");
+    editorHTML.setTheme("ace/theme/" + CONFIG.EditorTema);
+    editorHTML.getSession().setMode("ace/mode/html");
+    editorHTML.session.setUseWrapMode(true);
+    editorHTML.container.style.background = CONFIG.EditorColorFondo;
+    editorHTML.setShowFoldWidgets(false);
+    editorHTML.setShowPrintMargin(false);
+    editorHTML.container.style.height;
+
+    editorCSS = ace.edit("css");
+    editorCSS.setTheme("ace/theme/" + CONFIG.EditorTema);
+    editorCSS.getSession().setMode("ace/mode/css");
+    editorCSS.session.setUseWrapMode(true);
+    editorCSS.container.style.background = CONFIG.EditorColorFondo;
+    editorCSS.setShowFoldWidgets(false);
+    editorCSS.setShowPrintMargin(false); */
+
+    /* alert("modo ejercicio aún por desarrollar"); */
+    /* console.log("ex", CONFIG.exerciseHtml); */
+    /* var imagenUrl = CONFIG.exerciseImage;
+    var imagen = new Image();
+    imagen.src = imagenUrl;
+    $(".exercise-container").html("");
+    $(".exercise-container").append(imagen); */
+    /* $(".exercise-container").show();
     $(".config-container").hide();
 
     $("#modal_container").addClass("show");
     $("#modal_container").css("zIndex", 999);
-    $("#closeExercise").focus();
+    $("#closeExercise").focus(); */
+  });
+  $("#showEx").mousedown(function () {
+    htmlbackup = editorHTML.getValue();
+    cssbackup = editorCSS.getValue();
+    editorHTML.setValue(CONFIG.html);
+    editorCSS.setValue(CONFIG.css);
+    $("#run").trigger("click");
+    editorHTML.setValue(htmlbackup);
+    editorHTML.selection.selectFileStart();
+    editorHTML.selection.selectLineEnd();
+    editorHTML.focus();
+    editorCSS.setValue(cssbackup);
+    editorCSS.selection.selectFileStart();
+    editorCSS.selection.selectLineEnd();
+    editorCSS.focus();
+  });
+  $("#showEx").mouseup(function () {
+    $("#run").trigger("click");
   });
 
   $("#back").click(function () {

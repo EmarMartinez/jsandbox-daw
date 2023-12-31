@@ -23,6 +23,9 @@
 
 	<!-- El header se oculta para el modo iframe  -->
 	<header>
+        <div id="showEx" class="float-button float-button-rigth clickable" tabindex="1">
+            <p><i class="fa fa-eye"></i></p>
+        </div>
 		<div id="info-panel">
 			<!-- Muestra los botones de iframe, descargar y run a la izquierda -->
 			<div class="float-left"></div>
@@ -43,11 +46,11 @@
 		<div id="config" class="float-button float-button-left-3 clickable" tabindex="3">
 			<p><i class="fa fa-screwdriver-wrench"></i></p>
 		</div>
-
 		<div id="go-to-web" class="float-button float-button-rigth clickable" tabindex="7">
 			<p><i class="fa fa-external-link" aria-hidden="true"></i></p>
 		</div>
 	</div>
+    
 
 
 
@@ -266,7 +269,8 @@
 
 				</div>
 
-				<div class="exercise-container">
+				<!-- <div class="exercise-container">
+                   
 
 					<div class="container-row">
 
@@ -289,7 +293,7 @@
 					</div>
 
 
-				</div>
+				</div> -->
 
 			</div>
 
@@ -311,6 +315,8 @@
 	<!-- <script src="js/tools/console.js"></script> -->
 	<!-- Utilidad para capturar los mensajes de consola y mostrarlos también en el div id="dev" -->
 	<script src="js/app.js"></script> <!-- Main -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
 
 </body>
 
